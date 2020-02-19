@@ -97,6 +97,7 @@ namespace ServiceBusExplorer.Forms
             this.lblEntityPath = new System.Windows.Forms.Label();
             this.grouperServiceBusNamespaces = new ServiceBusExplorer.Controls.Grouper();
             this.cboServiceBusNamespace = new System.Windows.Forms.ComboBox();
+            this.btnSaveShortcut = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
             this.grouperConfigFileUse.SuspendLayout();
             this.grouperFilters.SuspendLayout();
@@ -765,6 +766,25 @@ namespace ServiceBusExplorer.Forms
             this.cboServiceBusNamespace.TabIndex = 0;
             this.cboServiceBusNamespace.SelectedIndexChanged += new System.EventHandler(this.cboServiceBusNamespace_SelectedIndexChanged);
             // 
+            // btnSaveShortcut
+            // 
+            this.btnSaveShortcut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveShortcut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(228)))), ((int)(((byte)(242)))));
+            this.btnSaveShortcut.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(180)))), ((int)(((byte)(209)))));
+            this.btnSaveShortcut.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(180)))), ((int)(((byte)(209)))));
+            this.btnSaveShortcut.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(180)))), ((int)(((byte)(209)))));
+            this.btnSaveShortcut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveShortcut.Location = new System.Drawing.Point(230, 527);
+            this.btnSaveShortcut.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnSaveShortcut.Name = "btnSaveShortcut";
+            this.btnSaveShortcut.Size = new System.Drawing.Size(115, 30);
+            this.btnSaveShortcut.TabIndex = 38;
+            this.btnSaveShortcut.Text = "Save Shortcut";
+            this.toolTip.SetToolTip(this.btnSaveShortcut, "Creates a shortcut for the selected namespace and filters");
+            this.btnSaveShortcut.UseVisualStyleBackColor = false;
+            this.btnSaveShortcut.Visible = false;
+            this.btnSaveShortcut.Click += new System.EventHandler(this.btnSaveShortcut_Click);
+            // 
             // ConnectForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -775,6 +795,7 @@ namespace ServiceBusExplorer.Forms
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnRename);
             this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnSaveShortcut);
             this.Controls.Add(this.grouperFilters);
             this.Controls.Add(this.logoPictureBox);
             this.Controls.Add(this.grouperServiceBusNamespaceSettings);
@@ -846,5 +867,6 @@ namespace ServiceBusExplorer.Forms
         private System.Windows.Forms.Button btnDelete;
         private Grouper grouperConfigFileUse;
         private System.Windows.Forms.Label lblConfigFileUse;
+        private System.Windows.Forms.Button btnSaveShortcut;
     }
 }

@@ -269,7 +269,20 @@ namespace ServiceBusExplorer.Forms
             GetServiceBusNamespaceSettingsFromConfiguration();
             ReadEventHubPartitionCheckpointFile();
             UpdateSavedConnectionsMenu();
-            DisplayNewVersionInformation();
+            bool isDebugBuild = false;
+
+            var config = TwoFilesConfiguration.Create(configFileUse, WriteToLog);
+#if DEBUG
+            isDebugBuild = true;
+#endif
+            if (isDebugBuild || config.GetBoolValue(ConfigurationParameters.DisableVersionCheck, false))
+            {
+                linkLabelNewVersionAvailable.Visible = false;
+            }
+            else
+            {
+                DisplayNewVersionInformation();
+            }
 
             WriteToLog(logMessage);
         }

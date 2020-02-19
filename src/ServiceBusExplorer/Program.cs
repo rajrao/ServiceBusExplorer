@@ -54,6 +54,8 @@ namespace ServiceBusExplorer
             Application.ThreadException += Application_ThreadException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             ServicePointManager.DefaultConnectionLimit = 200;
+            //following is needed for the JumpList feature
+            var app = new System.Windows.Application();
             try
             {
                 CommandLineOptions.ProcessCommandLineArguments(args, out var argument, out var value, out var helpText);

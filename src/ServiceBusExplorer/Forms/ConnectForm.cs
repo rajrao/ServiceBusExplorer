@@ -28,7 +28,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
+using System.Windows.Shell;
 using ServiceBusExplorer.Helpers;
 using ServiceBusExplorer.Utilities.Helpers;
 using Microsoft.ServiceBus;
@@ -367,6 +369,7 @@ namespace ServiceBusExplorer.Forms
             btnRename.Visible = false;
             btnDelete.Visible = false;
             btnSave.Visible = cboServiceBusNamespace.Text == EnterConnectionString;
+            btnSaveShortcut.Visible = (cboServiceBusNamespace.Text != EnterConnectionString) && (cboServiceBusNamespace.Text != SelectServiceBusNamespace);
 
             var containsStsEndpoint = !string.IsNullOrWhiteSpace(Key) &&
                                       !string.IsNullOrWhiteSpace(serviceBusHelper.ServiceBusNamespaces[Key].StsEndpoint);
@@ -679,6 +682,68 @@ namespace ServiceBusExplorer.Forms
             catch (Exception ex)
             {
                 HandleException(ex);
+            }
+        }
+
+        private void btnSaveShortcut_Click(object sender, EventArgs e)
+        {
+            var serviceBusNamespace = cboServiceBusNamespace.Text;
+
+            using (var parameterForm = new ParameterForm("Enter the name for the shortcut",
+                new List<string> {"name"},
+                new List<string> { serviceBusNamespace },
+                new List<bool> {false}))
+            {
+                if (parameterForm.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                var shortCutName = parameterForm.ParameterValues[0];
+                if (string.IsNullOrWhiteSpace(serviceBusNamespace))
+                {
+                    MainForm.StaticWriteToLog("The name of the shortcut cannot be empty.");
+                    return;
+                }
+                
+                try
+                {
+                    var jumpList = JumpList.GetJumpList(System.Windows.Application.Current) ?? new JumpList();
+
+                    var jumpTask = new JumpTask();
+                    var jumpTaskApplicationPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                    jumpTask.ApplicationPath = jumpTaskApplicationPath;
+                    jumpTask.IconResourcePath = jumpTaskApplicationPath;
+
+                    var arguments = new StringBuilder();
+                    arguments.Append($"-n \"{serviceBusNamespace}\"");
+                    if (!string.IsNullOrEmpty(txtQueueFilterExpression.Text))
+                    {
+                        arguments.Append($" -q \"{txtQueueFilterExpression.Text}\"");
+                    }
+                    if (!string.IsNullOrEmpty(txtTopicFilterExpression.Text))
+                    {
+                        arguments.Append($" -t \"{txtTopicFilterExpression.Text}\"");
+                    }
+                    if (!string.IsNullOrEmpty(txtSubscriptionFilterExpression.Text))
+                    {
+                        arguments.Append($" -s \"{txtSubscriptionFilterExpression.Text}\"");
+                    }
+
+                    jumpTask.Arguments = arguments.ToString();
+                    jumpTask.Title = $"{shortCutName}";
+                    jumpTask.Description = jumpTask.Arguments;
+                    jumpTask.CustomCategory = "Shortcuts";
+
+                    // Create and set the new JumpList.
+                    jumpList.JumpItems.Add(jumpTask);
+
+                    JumpList.SetJumpList(System.Windows.Application.Current, jumpList);
+                }
+                catch (ArgumentNullException ex)
+                {
+                    MainForm.StaticWriteToLog(ex.Message);
+                }
             }
         }
 
